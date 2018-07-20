@@ -8,7 +8,7 @@ def validate_address(address):
         raise Exception('The address of a developer should be 42 characters long')
 
 
-def merge_headers(*args):
+def merge_headers(args):
     if len(args) == 0:
         return
     headers = {}
