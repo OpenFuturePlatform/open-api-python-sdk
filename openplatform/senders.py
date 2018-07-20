@@ -9,12 +9,9 @@ class Scaffold:
         self.headers = headers
 
     def get_all(self):
-        try:
-            res = requests.get(base('scaffolds'), headers=self.headers)
-            res.raise_for_status()
-            return res
-        except requests.exceptions.HTTPError as err:
-            print(err)
+        res = requests.get(base('scaffolds'), headers=self.headers)
+        res.raise_for_status()
+        return res
 
     def get_single(self, address):
         validate_address(address)
