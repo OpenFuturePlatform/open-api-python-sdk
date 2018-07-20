@@ -5,9 +5,9 @@ setup(name='open-platform',
       version='0.1',
 
       # url needs to be discussed
-      url='https://git.zensoft.io/open-platform/sdk/python',
+      url='https://github.com/OpenFuturePlatform/open-api-python-sdk',
 
-      author='Eldiiar Egemberdiev',
+      author='openfuture.io',
 
       author_email='eldiiar.egemberdiev@zensoft.io',
 
