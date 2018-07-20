@@ -1,4 +1,4 @@
-api_prefix = '/api'
+api_prefix = 'api/'
 remote_api = ''
 
 # base_URL= 'https://api.openfuture.io for discussion

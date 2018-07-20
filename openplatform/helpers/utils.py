@@ -2,15 +2,10 @@ CONTENT_JSON = {'Content-Type': 'application/json'}
 
 
 def validate_address(address):
-    is_valid = True
     if not address.startswith('0x'):
-        print('\033[91m' + 'The address of a developer should start with 0x')
-        is_valid = False
+        raise Exception('The address of a developer should start with 0x')
     if len(address) != 42:
-        print('\033[91m' + 'The address of a developer should be 42 characters long')
-        is_valid = False
-    if not is_valid:
-        raise Exception('Address validation failed.')
+        raise Exception('The address of a developer should be 42 characters long')
 
 
 def merge_headers(*args):
