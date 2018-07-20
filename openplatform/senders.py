@@ -11,47 +11,47 @@ class Scaffold:
     def get_all(self):
         res = requests.get(base('scaffolds'), headers=self.headers)
         res.raise_for_status()
-        return res
+        return res.json()
 
     def get_single(self, address):
         validate_address(address)
         res = requests.get(base('scaffolds/' + address), headers=self.headers)
         res.raise_for_status()
-        return res
+        return res.json()
 
     def get_summary(self, address):
         validate_address(address)
         res = requests.get(base('scaffolds/' + address + '/summary'), headers=self.headers)
         res.raise_for_status()
-        return res
+        return res.json()
 
     def get_transactions(self, address):
         validate_address(address)
         res = requests.get(base('scaffolds/' + address + '/transactions'), headers=self.headers)
         res.raise_for_status()
-        return res
+        return res.json()
 
     def get_quota(self):
         res = requests.get(base('scaffolds/quota'))
         res.raise_for_status()
-        return res
+        return res.json()
 
     def deploy(self, data):
         res = requests.post(base('scaffolds/doDeploy'), data, headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
-        return res
+        return res.json()
 
     def deactivate(self, address):
         validate_address(address)
         res = requests.delete(base('scaffolds/' + address), headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
-        return res
+        return res.json()
 
     def set_webhook(self, address, data):
         validate_address(address)
         res = requests.patch(base('scaffolds/' + address), data, headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
-        return res
+        return res.json()
 
 
 class Shareholder:
@@ -64,18 +64,18 @@ class Shareholder:
         res = requests.post(base('scaffolds/' + address + '/holders'), data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
-        return res
+        return res.json()
 
     def update(self, address, holder_address, data):
         validate_address(address)
         res = requests.post(('scaffolds/' + address + '/holders/' + holder_address), data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
-        return res
+        return res.json()
 
     def remove(self, address, holder_address):
         validate_address(address)
         res = requests.delete(base('scaffolds/' + address + '/holders/' + holder_address),
                               headers=self.headers)
         res.raise_for_status()
-        return res
+        return res.json()
