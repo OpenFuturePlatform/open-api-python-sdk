@@ -2,6 +2,7 @@ import requests
 
 from openplatform.helpers.utils import validate_address, merge_headers, CONTENT_JSON
 from openplatform.urls import base
+import json
 
 
 class Scaffold:
@@ -37,7 +38,13 @@ class Scaffold:
         return res.json()
 
     def deploy(self, data):
-        res = requests.post(base('scaffolds/doDeploy'), data, headers=merge_headers([CONTENT_JSON, self.headers]))
+        print(base('scaffolds/doDeploy'))
+        print(json.dumps(merge_headers([CONTENT_JSON, self.headers]), indent=4))
+        print(json.dumps(data, indent=4))
+        res = requests.post(base('scaffolds/doDeploy'), json=data, headers=merge_headers([CONTENT_JSON, self.headers]))
+        print(res.status_code)
+        print(res.text)
+        print(res.json())
         res.raise_for_status()
         return res.json()
 
@@ -49,7 +56,8 @@ class Scaffold:
 
     def set_webhook(self, address, data):
         validate_address(address)
-        res = requests.patch(base('scaffolds/' + address), data, headers=merge_headers([CONTENT_JSON, self.headers]))
+        res = requests.patch(base('scaffolds/' + address), json=data,
+                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
@@ -61,14 +69,14 @@ class Shareholder:
 
     def create(self, address, data):
         validate_address(address)
-        res = requests.post(base('scaffolds/' + address + '/holders'), data,
+        res = requests.post(base('scaffolds/' + address + '/holders'), json=data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
     def update(self, address, holder_address, data):
         validate_address(address)
-        res = requests.post(('scaffolds/' + address + '/holders/' + holder_address), data,
+        res = requests.post(('scaffolds/' + address + '/holders/' + holder_address), json=data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
