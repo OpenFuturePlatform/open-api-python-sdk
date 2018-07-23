@@ -56,8 +56,7 @@ class Scaffold:
 
 
 class Shareholder:
-    def __init__(self, open_key, headers=None):
-        self.open_key = open_key
+    def __init__(self, headers=None):
         self.headers = headers
 
     def create(self, address, data):
@@ -69,7 +68,7 @@ class Shareholder:
 
     def update(self, address, holder_address, data):
         validate_address(address)
-        res = requests.post(('scaffolds/' + address + '/holders/' + holder_address), json=data,
+        res = requests.post(base('scaffolds/' + address + '/holders/' + holder_address), json=data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
