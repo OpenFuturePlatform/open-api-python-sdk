@@ -5,7 +5,7 @@ stages:
   - deploy
 
 before_script:
-  - apt update && apt install gettext-base
+  - apk --no-cache add gettext
 
 
 ###################
