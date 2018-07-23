@@ -32,7 +32,7 @@ class Scaffold:
         return res.json()
 
     def get_quota(self):
-        res = requests.get(base('scaffolds/quota'))
+        res = requests.get(base('scaffolds/quota'), headers=self.headers)
         res.raise_for_status()
         return res.json()
 
