@@ -2,7 +2,6 @@ import requests
 
 from openplatform.helpers.utils import validate_address, merge_headers, CONTENT_JSON
 from openplatform.urls import base
-import json
 
 
 class Scaffold:
@@ -38,13 +37,7 @@ class Scaffold:
         return res.json()
 
     def deploy(self, data):
-        print(base('scaffolds/doDeploy'))
-        print(json.dumps(merge_headers([CONTENT_JSON, self.headers]), indent=4))
-        print(json.dumps(data, indent=4))
         res = requests.post(base('scaffolds/doDeploy'), json=data, headers=merge_headers([CONTENT_JSON, self.headers]))
-        print(res.status_code)
-        print(res.text)
-        print(res.json())
         res.raise_for_status()
         return res.json()
 
