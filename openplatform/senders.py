@@ -1,6 +1,6 @@
 import requests
 
-from openplatform.helpers.utils import validate_address, merge_headers, CONTENT_JSON
+from openplatform.utils import validate_address, merge_headers, CONTENT_JSON
 from openplatform.urls import base
 
 
