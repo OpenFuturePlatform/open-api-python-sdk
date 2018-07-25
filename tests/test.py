@@ -13,7 +13,7 @@ def base_url_mock(rest):
     return urllib.parse.urljoin(predefined_url, rest)
 
 
-class TestGettingScaffold(TestCase):
+class TestScaffoldGetters(TestCase):
     mock_requests_patcher = None
     requests_mock = None
 
@@ -36,7 +36,6 @@ class TestGettingScaffold(TestCase):
 
         # Confirm that the request-response cycle completed successfully.
         self.assertIsNotNone(response)
-        print(json.dumps(response))
         self.assertEqual(response, list_of_scaffolds)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds'), headers=authorization_header)
 
@@ -49,13 +48,15 @@ class TestGettingScaffold(TestCase):
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
 
     def test_getting_single_without_token(self):
+        invalid_key = "some_invalid_open_key"
         self.requests_mock.return_value.status_code = 401
         self.requests_mock.return_value.json.return_value = {"status": 401,
                                                              "message": "Open token is invalid or disabled"}
-        op = OpenPlatform("some_invalid_open_key")
+        op = OpenPlatform(invalid_key)
         response = op.scaffold.get_single(valid_address)
         self.assertEqual(response.get('status'), 401, "There should be an error in the API")
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
+        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address),
+                                              headers={'Authorization': invalid_key})
 
     def test_getting_single_with_wrong_address(self):
         self.requests_mock.return_value.status_code = 404
@@ -106,6 +107,53 @@ class TestGettingScaffold(TestCase):
         self.assertEqual(response, result_qouta)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/quota'),
                                               headers=authorization_header)
+
+
+class TestScaffoldPosters(TestCase):
+
+    @patch('openplatform.senders.requests.post')
+    def test_deploying(self, post_mock):
+        post_mock.return_value = Mock(ok=True)
+        post_mock.return_value.json.return_value = scaffold
+
+        op = OpenPlatform(test_key)
+        response = op.scaffold.deploy(scaffold_data)
+
+        self.assertIsNotNone(response)
+        self.assertEqual(response, scaffold)
+        post_mock.assert_called_with(base_url_mock('scaffolds/doDeploy'), json=scaffold_data,
+                                     headers=headers)
+
+
+class TestScaffoldDeleters(TestCase):
+
+    @patch('openplatform.senders.requests.delete')
+    def test_deactivating(self, post_mock):
+        post_mock.return_value = Mock(ok=True)
+        post_mock.return_value.json.return_value = scaffold
+
+        op = OpenPlatform(test_key)
+        response = op.scaffold.deactivate(valid_address)
+
+        self.assertIsNotNone(response)
+        self.assertEqual(response, scaffold)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=headers)
+
+
+class TestScaffoldPatchers(TestCase):
+
+    @patch('openplatform.senders.requests.patch')
+    def test_setting_web_hook(self, post_mock):
+        post_mock.return_value = Mock(ok=True)
+        post_mock.return_value.json.return_value = scaffold
+        web_hook = {"webHook": "https://zensoft.io"}
+        op = OpenPlatform(test_key)
+        response = op.scaffold.set_webhook(valid_address, web_hook)
+
+        self.assertIsNotNone(response)
+        self.assertEqual(response, scaffold)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), json=web_hook,
+                                     headers=headers)
 
 
 class TestHelpers(TestCase):

@@ -107,3 +107,18 @@ summary = {'transactionIndex': 0,
            'tokenBalance': 0,
            'enabled': False,
            'scaffold': scaffold}
+
+scaffold_data = {
+    "openKey": test_key,
+    "developerAddress": developer_address,
+    "description": "testing_scaffold",
+    "fiatAmount": "2",
+    "currency": "USD",
+    "conversionAmount": "0.021833823",
+    "properties": [
+        {
+            "name": "user_id",
+            "type": "STRING"
+        }
+    ]
+}
