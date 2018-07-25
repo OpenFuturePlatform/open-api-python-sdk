@@ -57,15 +57,6 @@ class TestGettingScaffold(TestCase):
         self.assertEqual(response.get('status'), 401, "There should be an error in the API")
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
 
-    def test_getting_single_without_token(self):
-        self.requests_mock.return_value.status_code = 401
-        self.requests_mock.return_value.json.return_value = {"status": 401,
-                                                             "message": "Open token is invalid or disabled"}
-        op = OpenPlatform(test_key)
-        response = op.scaffold.get_single(valid_address)
-        self.assertEqual(response.get('status'), 401, "There should be an error in the API")
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
-
     def test_getting_single_with_wrong_address(self):
         self.requests_mock.return_value.status_code = 404
         self.requests_mock.return_value.json.return_value = {
