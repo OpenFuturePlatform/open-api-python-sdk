@@ -2,7 +2,7 @@ import urllib.parse
 from unittest import TestCase
 from unittest.mock import patch, Mock
 
-from openplatform.main import OpenPlatform
+from open_api_sdk import OpenPlatform
 from openplatform.utils import validate_address, merge_headers
 from tests.const import *
 
