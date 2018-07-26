@@ -1,7 +1,7 @@
 import requests
 
-from openplatform.utils import validate_address, merge_headers, CONTENT_JSON
 from openplatform.urls import base
+from openplatform.utils import validate_address, merge_headers, CONTENT_JSON
 
 
 class Scaffold:
@@ -68,14 +68,14 @@ class Shareholder:
 
     def update(self, address, holder_address, data):
         validate_address(address)
-        res = requests.post(base('scaffolds/' + address + '/holders/' + holder_address), json=data,
-                            headers=merge_headers([CONTENT_JSON, self.headers]))
+        res = requests.put(base('scaffolds/' + address + '/holders/' + holder_address), json=data,
+                           headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
     def remove(self, address, holder_address):
         validate_address(address)
         res = requests.delete(base('scaffolds/' + address + '/holders/' + holder_address),
-                              headers=self.headers)
+                              headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
