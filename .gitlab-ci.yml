@@ -1,11 +1,22 @@
 image: python:3-alpine
 
 stages:
+  - tests
   - build
   - deploy
 
 before_script:
   - apk --no-cache add gettext
+
+
+###################
+# Tests
+###################
+unit-tests:
+  stage: tests
+  script:
+    - pip3 install -r requirements.txt
+    - python3 -m unittest
 
 
 ###################
@@ -23,7 +34,9 @@ build-package:
     paths:
       - dist/*
     expire_in: 1 day
-
+  only:
+    - master
+    - tags
 
 ###################
 # Deploy
