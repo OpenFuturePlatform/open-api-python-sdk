@@ -76,37 +76,55 @@ abi = """[
      "name": "PaidForShareHolder", "type": "event"}]
 """
 developer_address = '0xDc29484cc9C02Ee01015f33BcA8bBb5C7293Fb54'
+
 test_key = 'op_pk_50g48642-1af1-5dfg-54sz-f868s5v8796c'
+
 test_base_url = 'https://api.open-platform.zensoft.io'
-scaffold = {'version': 'V2',
-            'conversionAmount': '0.021833823',
-            'address': '0x1c297f40beb075936d6dbe4b245b92738867ecb1',
-            'currency': 'USD',
-            'developerAddress': developer_address,
-            'description': 'scaffold_for_testing',
-            'fiatAmount': '2',
-            'abi': abi,
-            'properties': [{'type': 'STRING', 'defaultValue': None, 'name': 'user_id'}],
-            'user': {
-                'id': 1,
-                'roles': [{'key': 'ROLE_MASTER'}],
-                'credits': 0,
-                'openKeys': [{'value': 'op_pk_029bbb64-a31d-4ec6-b881-8d8db19c70ee',
-                              'expiredDate': None,
-                              'enabled': True}],
-            },
-            'webHook': None}
-list_of_scaffolds = {'totalCount': 1, 'list': [
-    scaffold]}
+
+scaffold = {
+    'version': 'V2',
+    'conversionAmount': '0.021833823',
+    'address': '0x1c297f40beb075936d6dbe4b245b92738867ecb1',
+    'currency': 'USD',
+    'developerAddress': developer_address,
+    'description': 'scaffold_for_testing',
+    'fiatAmount': '2',
+    'abi': abi,
+    'properties': [{'type': 'STRING', 'defaultValue': None, 'name': 'user_id'}],
+    'user': {
+        'id': 1,
+        'roles': [{'key': 'ROLE_MASTER'}],
+        'credits': 0,
+        'openKeys': [{'value': 'op_pk_029bbb64-a31d-4ec6-b881-8d8db19c70ee',
+                      'expiredDate': None,
+                      'enabled': True}],
+    },
+    'webHook': None}
+
+list_of_scaffolds = {'totalCount': 1, 'list': [scaffold]}
+
 authorization_header = {'Authorization': test_key}
-headers = {'Authorization': test_key, 'Content-Type': 'application/json'}
+
+request_headers = {'Authorization': test_key, 'Content-Type': 'application/json'}
+
 valid_address = "0x0000000000000000000000000000000000000000"
 
-summary = {'transactionIndex': 0,
-           'shareHolders': [],
-           'tokenBalance': 0,
-           'enabled': False,
-           'scaffold': scaffold}
+summary = {
+    'transactionIndex': 0,
+    'shareHolders': [],
+    'tokenBalance': 0,
+    'enabled': False,
+    'scaffold': scaffold}
+
+transactions = {
+    'totalCount': 1,
+    'list': [{
+        'date': '2018-07-26T04:34:36.815+0000',
+        'event': {
+            'userAddress': developer_address,
+            'partnerShare': 30,
+            'type': 'ADDED_SHARE_HOLDER'},
+        'scaffold': scaffold}]}
 
 scaffold_data = {
     "openKey": test_key,
@@ -122,3 +140,28 @@ scaffold_data = {
         }
     ]
 }
+
+shareholder_to_be_added = {'address': developer_address, 'percent': 30}
+
+shareholder_to_be_updated = {'percent': 30}
+
+new_shareholders = {
+    'shareHolders': [{'percent': 30, 'address': developer_address}],
+    'tokenBalance': 0,
+    'enabled': False,
+    'scaffold': scaffold,
+    'transactionIndex': 0}
+
+updated_shareholder = {
+    'tokenBalance': 0,
+    'scaffold': scaffold,
+    'shareHolders': [{'address': developer_address, 'percent': 10}],
+    'enabled': False,
+    'transactionIndex': 0}
+
+removing_shareholder = {
+    'tokenBalance': 0,
+    'scaffold': scaffold,
+    'shareHolders': [],
+    'enabled': False,
+    'transactionIndex': 0}

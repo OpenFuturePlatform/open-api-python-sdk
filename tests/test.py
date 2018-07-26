@@ -1,4 +1,3 @@
-import json
 import urllib.parse
 from unittest import TestCase
 from unittest.mock import patch, Mock
@@ -35,7 +34,6 @@ class TestScaffoldGetters(TestCase):
         response = op.scaffold.get_all()
 
         # Confirm that the request-response cycle completed successfully.
-        self.assertIsNotNone(response)
         self.assertEqual(response, list_of_scaffolds)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds'), headers=authorization_header)
 
@@ -43,7 +41,6 @@ class TestScaffoldGetters(TestCase):
         op = OpenPlatform(test_key)
         self.requests_mock.return_value.json.return_value = scaffold
         response = op.scaffold.get_single(valid_address)
-        self.assertIsNotNone(response)
         self.assertEqual(response, scaffold)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
 
@@ -75,7 +72,6 @@ class TestScaffoldGetters(TestCase):
         op = OpenPlatform(test_key)
         self.requests_mock.return_value.json.return_value = list_of_scaffolds
         response = op.scaffold.get_all()
-        self.assertIsNotNone(response)
         self.assertEqual(response, list_of_scaffolds)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds'), headers=authorization_header)
 
@@ -83,18 +79,15 @@ class TestScaffoldGetters(TestCase):
         op = OpenPlatform(test_key)
         self.requests_mock.return_value.json.return_value = summary
         response = op.scaffold.get_summary(valid_address)
-        self.assertIsNotNone(response)
         self.assertEqual(response, summary)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/summary'),
                                               headers=authorization_header)
 
     def test_getting_transactions_successfully(self):
-        result_transactions = {'totalCount': 0, 'list': []}
         op = OpenPlatform(test_key)
-        self.requests_mock.return_value.json.return_value = result_transactions
+        self.requests_mock.return_value.json.return_value = transactions
         response = op.scaffold.get_transactions(valid_address)
-        self.assertIsNotNone(response)
-        self.assertEqual(response, result_transactions)
+        self.assertEqual(response, transactions)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/transactions'),
                                               headers=authorization_header)
 
@@ -103,7 +96,6 @@ class TestScaffoldGetters(TestCase):
         result_qouta = {'limitCount': 10, 'currentCount': 4}
         self.requests_mock.return_value.json.return_value = result_qouta
         response = op.scaffold.get_quota()
-        self.assertIsNotNone(response)
         self.assertEqual(response, result_qouta)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/quota'),
                                               headers=authorization_header)
@@ -113,47 +105,76 @@ class TestScaffoldPosters(TestCase):
 
     @patch('openplatform.senders.requests.post')
     def test_deploying(self, post_mock):
-        post_mock.return_value = Mock(ok=True)
         post_mock.return_value.json.return_value = scaffold
 
         op = OpenPlatform(test_key)
         response = op.scaffold.deploy(scaffold_data)
 
-        self.assertIsNotNone(response)
         self.assertEqual(response, scaffold)
         post_mock.assert_called_with(base_url_mock('scaffolds/doDeploy'), json=scaffold_data,
-                                     headers=headers)
+                                     headers=request_headers)
 
 
 class TestScaffoldDeleters(TestCase):
 
     @patch('openplatform.senders.requests.delete')
     def test_deactivating(self, post_mock):
-        post_mock.return_value = Mock(ok=True)
         post_mock.return_value.json.return_value = scaffold
 
         op = OpenPlatform(test_key)
         response = op.scaffold.deactivate(valid_address)
 
-        self.assertIsNotNone(response)
         self.assertEqual(response, scaffold)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=headers)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=request_headers)
 
 
 class TestScaffoldPatchers(TestCase):
 
     @patch('openplatform.senders.requests.patch')
     def test_setting_web_hook(self, post_mock):
-        post_mock.return_value = Mock(ok=True)
         post_mock.return_value.json.return_value = scaffold
         web_hook = {"webHook": "https://zensoft.io"}
         op = OpenPlatform(test_key)
         response = op.scaffold.set_webhook(valid_address, web_hook)
 
-        self.assertIsNotNone(response)
         self.assertEqual(response, scaffold)
         post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), json=web_hook,
-                                     headers=headers)
+                                     headers=request_headers)
+
+
+class TestShareholders(TestCase):
+
+    @patch('openplatform.senders.requests.post')
+    def test_creation(self, post_mock):
+        post_mock.return_value.json.return_value = new_shareholders
+        op = OpenPlatform(test_key)
+        response = op.shareholder.create(valid_address, shareholder_to_be_added)
+
+        self.assertEqual(response, new_shareholders)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders'),
+                                     json=shareholder_to_be_added,
+                                     headers=request_headers)
+
+    @patch('openplatform.senders.requests.put')
+    def test_updating(self, post_mock):
+        post_mock.return_value.json.return_value = scaffold
+        op = OpenPlatform(test_key)
+        response = op.shareholder.update(valid_address, developer_address, shareholder_to_be_updated)
+
+        self.assertEqual(response, scaffold)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders/' + developer_address),
+                                     json=shareholder_to_be_updated,
+                                     headers=request_headers)
+
+    @patch('openplatform.senders.requests.delete')
+    def test_removing(self, post_mock):
+        post_mock.return_value.json.return_value = removing_shareholder
+        op = OpenPlatform(test_key)
+        response = op.shareholder.remove(valid_address, developer_address)
+
+        self.assertEqual(response, removing_shareholder)
+        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders/' + developer_address),
+                                     headers=request_headers)
 
 
 class TestHelpers(TestCase):
@@ -172,4 +193,4 @@ class TestHelpers(TestCase):
     def test_merge_headers(self):
         given_list_of_headers = [{'Authorization': test_key}, {'Content-Type': 'application/json'}]
         merged_headers = merge_headers(given_list_of_headers)
-        self.assertEqual(headers, merged_headers)
+        self.assertEqual(request_headers, merged_headers)
