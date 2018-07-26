@@ -1,19 +1,19 @@
 from setuptools import setup, find_packages
 
-setup(name='open-platform',
+setup(name='open-api-sdk',
 
-      version='0.1',
+      version='${VERSION}',
 
       # url needs to be discussed
       url='https://github.com/OpenFuturePlatform/open-api-python-sdk',
 
-      author='openfuture.io',
+      author='OPEN Platform',
 
-      author_email='eldiiar.egemberdiev@zensoft.io',
+      author_email='openplatform@zensoft.io',
 
-      description='A library for interactions with Open Platform.',
+      description='SDK library for interactions with Open Platform.',
 
-      license=open('LICENSE.txt').read(),
+      license='MIT licence',
 
       long_description=open('README.md').read(),
 
@@ -21,18 +21,13 @@ setup(name='open-platform',
 
       classifiers=[
 
-          'Development Status :: 2 - Pre-Alpha',
-
-          'Intended Audience :: Developers',
-
-          "Programming Language :: Python",
-
           "Programming Language :: Python :: 3",
 
           "Operating System :: OS Independent",
 
           'Topic :: Software Development :: Libraries :: Python Modules',
 
+          'License :: OSI Approved :: MIT License',
       ],
 
       packages=find_packages(),
