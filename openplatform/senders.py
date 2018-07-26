@@ -1,7 +1,7 @@
 import requests
 
-from openplatform.helpers.utils import validate_address, merge_headers, CONTENT_JSON
 from openplatform.urls import base
+from openplatform.utils import validate_address, merge_headers, CONTENT_JSON
 
 
 class Scaffold:
@@ -32,12 +32,12 @@ class Scaffold:
         return res.json()
 
     def get_quota(self):
-        res = requests.get(base('scaffolds/quota'))
+        res = requests.get(base('scaffolds/quota'), headers=self.headers)
         res.raise_for_status()
         return res.json()
 
     def deploy(self, data):
-        res = requests.post(base('scaffolds/doDeploy'), data, headers=merge_headers([CONTENT_JSON, self.headers]))
+        res = requests.post(base('scaffolds/doDeploy'), json=data, headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
@@ -49,33 +49,33 @@ class Scaffold:
 
     def set_webhook(self, address, data):
         validate_address(address)
-        res = requests.patch(base('scaffolds/' + address), data, headers=merge_headers([CONTENT_JSON, self.headers]))
+        res = requests.patch(base('scaffolds/' + address), json=data,
+                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
 
 class Shareholder:
-    def __init__(self, open_key, headers=None):
-        self.open_key = open_key
+    def __init__(self, headers=None):
         self.headers = headers
 
     def create(self, address, data):
         validate_address(address)
-        res = requests.post(base('scaffolds/' + address + '/holders'), data,
+        res = requests.post(base('scaffolds/' + address + '/holders'), json=data,
                             headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
     def update(self, address, holder_address, data):
         validate_address(address)
-        res = requests.post(('scaffolds/' + address + '/holders/' + holder_address), data,
-                            headers=merge_headers([CONTENT_JSON, self.headers]))
+        res = requests.put(base('scaffolds/' + address + '/holders/' + holder_address), json=data,
+                           headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
 
     def remove(self, address, holder_address):
         validate_address(address)
         res = requests.delete(base('scaffolds/' + address + '/holders/' + holder_address),
-                              headers=self.headers)
+                              headers=merge_headers([CONTENT_JSON, self.headers]))
         res.raise_for_status()
         return res.json()
