@@ -18,7 +18,7 @@ Using pip:
 $ pip install open-api-sdk
 ```
 
-### Get started
+## Get started
 OPEN Platform uses OpenKeys to allow access to the API. You can register a new OpenKey at your Account.
 
 OPEN Platform expects for the OpenKey to be included in all API requests to the server in a header.
@@ -53,6 +53,7 @@ Attribute | Type | Description
 ----------|------|-----------
 totalCount|Long  | Total count of entities in a database
 list      |[]   | List of entities with type T (T is generic)
+
 #### Scaffold
 
 ##### Scaffold attributes
@@ -83,7 +84,7 @@ address = '0x1c297f40beb075936d6dbe4b245b92738867ecb1' # an address of the scaff
 scaffold = op.scaffold.get_single(address)
 ```
 
-#### Scaffold summary attributes
+##### Scaffold summary attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
@@ -106,14 +107,14 @@ summary = op.scaffold.get_summary(address)
 transactions = op.scaffold.get_summary(address)
 ```
 
-#### Set web hook request `data`
+##### Set web hook request `data`
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
 address         |String                                               | Scaffold address
 webHook         |String                                               | Scaffold webhook for events
 
-#####example:
+##### example:
 
 ```python
 data = {'webHook': 'https://example.com'}
@@ -124,7 +125,7 @@ data = {'webHook': 'https://example.com'}
 scaffold = op.scaffold.set_webhook(address, data)
 ```
 
-#### Deploy scaffold request `data`
+##### Deploy scaffold request `data`
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
@@ -137,7 +138,7 @@ developerAddress|String                                               | Scaffold
 webHook         |String                                               | Scaffold webhook for events
 properties      |[ScaffoldProperty](#scaffold-properties-attributes)[]| Scaffold properties
 
-#####example:
+##### example:
 
 ```python
 data = {
@@ -169,7 +170,7 @@ scaffold = op.scaffold.deploy(data)
 scaffold = op.scaffold.deactivate(address)
 ```
 
-#### Quota attributes
+##### Quota attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
@@ -184,14 +185,14 @@ quota = op.scaffold.get_quota()
 ```
 #### Shareholder
 
-#### Shareholder attributes
+##### Shareholder attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
 address         |String                                               | Shareholder address
 percent         |Int                                                  | Shareholder percent
 
-#### Add shareholder request `data`
+##### Add shareholder request `data`
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
@@ -212,7 +213,7 @@ data = {
 summary = op.shareholder.create(address, data)
 ```
 
-#### Update shareholder request `data`
+##### Update shareholder request `data`
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
