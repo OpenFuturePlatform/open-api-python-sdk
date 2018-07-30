@@ -19,7 +19,7 @@ $ pip install open-api-sdk
 ```
 
 ## Get started
-OPEN Platform uses OpenKeys to allow access to the API. You can register a new OpenKey at your Account.
+OPEN Platform uses OpenKeys to allow access to the API. You can register a new OpenKey at your [Account.](https://api.openfuture.io/ "Open API")
 
 OPEN Platform expects for the OpenKey to be included in all API requests to the server in a header.
 
