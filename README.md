@@ -70,6 +70,13 @@ developerAddress|String                                               | Scaffold
 webHook         |String                                               | Scaffold webhook for events
 properties      |[ScaffoldProperty](#scaffold-properties-attributes)[]| Scaffold properties
 
+##### Scaffold properties attributes
+
+Attribute   | Type       | Description
+------------|------------|-----------
+name        |String      | Property name
+type        |PropertyType| Property type
+defaultValue|String      | Property default value
 
 ##### get_all()
 
@@ -185,22 +192,17 @@ quota = op.scaffold.get_quota()
 ```
 #### Shareholder
 
-##### Shareholder attributes
+##### Share holder attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------
 address         |String                                               | Shareholder address
 percent         |Int                                                  | Shareholder percent
 
-##### Add shareholder request `data`
-
-Attribute       | Type                                                | Description
-----------------|-----------------------------------------------------|-----------
-address         |String                                               | Shareholder address
-percent         |Int                                                  | Shareholder percent
 
 ##### example:
 ```python
+# Shareholder attributes
 data = {
     'address': '0x0000000000000000000000000000000000000000',
     'percent': 30
