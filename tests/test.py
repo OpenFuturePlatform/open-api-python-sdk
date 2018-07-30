@@ -82,8 +82,8 @@ class TestScaffoldGetters(TestCase):
         with self.assertRaises(requests.exceptions.HTTPError) as error:
             op.scaffold.get_single(valid_address)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
-        self.failUnless(mock_response.raise_for_status.called)
-        self.assertEquals('Not Found', str(error.exception))
+        self.assertTrue(mock_response.raise_for_status.called)
+        self.assertEqual('Not Found', str(error.exception))
 
     def test_getting_all_successfully(self):
         op = OpenPlatform(test_key)
