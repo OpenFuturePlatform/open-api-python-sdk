@@ -2,6 +2,8 @@ import urllib.parse
 from unittest import TestCase
 from unittest.mock import patch, Mock
 
+import requests
+
 from open_api import OpenPlatform
 from openplatform.utils import validate_address, merge_headers
 from tests.const import *
@@ -25,7 +27,7 @@ class TestScaffoldGetters(TestCase):
     def tearDown(cls):
         cls.mock_requests_patcher.stop()
 
-    def test_connection(self):
+    def test_getting_list(self):
         self.requests_mock.return_value = Mock(ok=True)
         self.requests_mock.return_value.json.return_value = list_of_scaffolds
 
@@ -44,29 +46,44 @@ class TestScaffoldGetters(TestCase):
         self.assertEqual(response, scaffold)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
 
-    def test_getting_single_without_token(self):
-        invalid_key = "some_invalid_open_key"
-        self.requests_mock.return_value.status_code = 401
-        self.requests_mock.return_value.json.return_value = {"status": 401,
-                                                             "message": "Open token is invalid or disabled"}
+    def test_getting_single_with_wrong_token(self):
+        mock_response = Mock()
+        http_error = requests.exceptions.HTTPError()
+        mock_response.raise_for_status.side_effect = http_error
+        self.requests_mock.return_value = mock_response
+
+        invalid_key = 'some_invalid_open_key'
+        self.requests_mock.return_value.json.return_value = {'status': 401,
+                                                             'message': 'Open token is invalid or disabled'}
         op = OpenPlatform(invalid_key)
-        response = op.scaffold.get_single(valid_address)
-        self.assertEqual(response.get('status'), 401, "There should be an error in the API")
+        with self.assertRaises(requests.HTTPError) as error:
+            op.scaffold.get_single(valid_address)
+        self.assertEqual(str(error.exception), 'Open token is invalid or disabled')
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address),
                                               headers={'Authorization': invalid_key})
 
+    def test_getting_single_without_token(self):
+        with self.assertRaises(AttributeError) as error:
+            OpenPlatform()
+        self.assertEqual(str(error.exception), 'open_key can not be empty')
+
     def test_getting_single_with_wrong_address(self):
-        self.requests_mock.return_value.status_code = 404
+        mock_response = Mock()
+        http_error = requests.exceptions.HTTPError()
+        mock_response.raise_for_status.side_effect = http_error
+        self.requests_mock.return_value = mock_response
         self.requests_mock.return_value.json.return_value = {
-            "timestamp": "2018-07-25T09:44:00.491+0000",
-            "status": 404,
-            "error": "Not Found",
-            "message": "Not Found",
-            "path": "/api/scaffolds/0x0000000000000000000000000000000000000000"}
+            'timestamp': '2018-07-25T09:44:00.491+0000',
+            'status': 404,
+            'error': 'Not Found',
+            'message': 'Not Found',
+            'path': '/api/scaffolds/0x0000000000000000000000000000000000000000'}
         op = OpenPlatform(test_key)
-        response = op.scaffold.get_single(valid_address)
-        self.assertEqual(response.get('status'), 404, "Should not be found")
+        with self.assertRaises(requests.exceptions.HTTPError) as error:
+            op.scaffold.get_single(valid_address)
         self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
+        self.failUnless(mock_response.raise_for_status.called)
+        self.assertEquals('Not Found', str(error.exception))
 
     def test_getting_all_successfully(self):
         op = OpenPlatform(test_key)
@@ -133,7 +150,7 @@ class TestScaffoldPatchers(TestCase):
     @patch('openplatform.senders.requests.patch')
     def test_setting_web_hook(self, post_mock):
         post_mock.return_value.json.return_value = scaffold
-        web_hook = {"webHook": "https://zensoft.io"}
+        web_hook = {'webHook': 'https://zensoft.io'}
         op = OpenPlatform(test_key)
         response = op.scaffold.set_webhook(valid_address, web_hook)
 
@@ -180,7 +197,7 @@ class TestShareholders(TestCase):
 class TestHelpers(TestCase):
     def test_address_validation(self):
         address = 'address'
-        # validation should raise AttributeError. Address should start with "0x"
+        # validation should raise AttributeError. Address should start with '0x'
         with self.assertRaises(AttributeError):
             validate_address(address)
         address = '0xNotEnoughLength'
