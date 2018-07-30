@@ -85,7 +85,7 @@ def raise_for_error(res):
     try:
         res.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        if res.text:
+        if hasattr(res, 'json'):
             raise requests.exceptions.HTTPError(res.json().get('message'))
         else:
             raise e
