@@ -1,0 +1,55 @@
+image: python:3-alpine
+
+stages:
+  - tests
+  - build
+  - deploy
+
+before_script:
+  - apk --no-cache add gettext
+
+
+###################
+# Tests
+###################
+unit-tests:
+  stage: tests
+  script:
+    - pip3 install -r requirements.txt
+    - python3 -m unittest
+
+
+###################
+# Build
+###################
+build-package:
+  stage: build
+  variables:
+    VERSION: build
+  script:
+    - envsubst '${VERSION}' < setup.py > setup.py.new
+    - mv setup.py.new setup.py
+    - python3 setup.py sdist bdist_wheel
+  artifacts:
+    paths:
+      - dist/*
+    expire_in: 1 day
+  only:
+    - master
+    - tags
+
+###################
+# Deploy
+###################
+deploy-package:
+  stage: deploy
+  script:
+    - VERSION=$(echo ${CI_COMMIT_REF_NAME} | sed "s/v//")
+    - export VERSION=$VERSION
+    - envsubst '${VERSION}' < setup.py > setup.py.new
+    - mv setup.py.new setup.py
+    - echo -e "$PYPI" > ~/.pypirc
+    - pip install twine
+    - twine upload dist/* -r pypi
+  only:
+    - tags
