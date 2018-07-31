@@ -1,6 +1,6 @@
 # open-api-sdk
 
-A library for interactions with Open Platform.
+Open-api-sdk is a library for interaction with Open Platform.
 
 ## Content
 
@@ -21,22 +21,22 @@ $ pip install open-api-sdk
 ## Get started
 OPEN Platform uses OpenKeys to allow access to the API. You can register a new OpenKey at your [Account.](https://api.openfuture.io/ "Open API")
 
-OPEN Platform expects for the OpenKey to be included in all API requests to the server in a header.
+OPEN Platform expects the OpenKey to be included in all API requests to the server in a header.
 
-We assume you have an open_key by this moment. 
+We assume that you have the OpenKey by this moment. 
 
-To access the library import the OpenPlatform class and call an instance of it with open key as followed: 
+To access the library import an OpenPlatform class and call an instance with the OpenKey as following: 
 
 
 ```python
 from open_api import OpenPlatform
 
-# Access api via instance of OpenPlatform class
+# Access API via instance of OpenPlatform class
 op = OpenPlatform(open_key)
 ```
 `open_key` - your open key. 
 
-In the following examples it is assumed the `op` is the result of instantiating the `OpenPlatform` class with `open_key`
+In the following examples, it is assumed that `op` is a result of instantiating the `OpenPlatform` class with the `open_key`
 
 ### API
 
