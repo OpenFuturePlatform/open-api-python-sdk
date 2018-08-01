@@ -24,9 +24,9 @@ unit-tests:
 ###################
 build-package:
   stage: build
-  variables:
-    VERSION: build
   script:
+    - VERSION=$(echo ${CI_COMMIT_REF_NAME} | sed "s/v//")
+    - export VERSION=$VERSION
     - envsubst '${VERSION}' < setup.py > setup.py.new
     - mv setup.py.new setup.py
     - python3 setup.py sdist bdist_wheel
