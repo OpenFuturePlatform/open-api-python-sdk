@@ -32,6 +32,6 @@ setup(name='open-api-sdk',
 
       packages=find_packages(),
 
-      setup_requires=['requests'],
+      install_requires=['requests'],
 
       zip_safe=False, )

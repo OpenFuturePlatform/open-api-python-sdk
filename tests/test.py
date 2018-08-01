@@ -4,7 +4,7 @@ from unittest.mock import patch, Mock
 
 import requests
 
-from open_api import OpenPlatform
+from openplatform.open_api import OpenPlatform
 from openplatform.utils import validate_address, merge_headers
 from tests.const import *
 

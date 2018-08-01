@@ -29,7 +29,7 @@ To access the library import an OpenPlatform class and call an instance with the
 
 
 ```python
-from open_api import OpenPlatform
+from openplatform import OpenPlatform
 
 # Access API via instance of OpenPlatform class
 op = OpenPlatform(open_key)
