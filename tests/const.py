@@ -79,8 +79,6 @@ developer_address = '0xDc29484cc9C02Ee01015f33BcA8bBb5C7293Fb54'
 
 test_key = 'op_pk_50g48642-1af1-5dfg-54sz-f868s5v8796c'
 
-test_base_url = 'https://api.open-platform.zensoft.io'
-
 scaffold = {
     'version': 'V2',
     'conversionAmount': '0.021833823',
