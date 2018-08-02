@@ -5,8 +5,12 @@ stages:
   - build
   - deploy
 
-before_script:
-  - apk --no-cache add gettext
+.set_version: &set_version |
+  apk --no-cache add gettext
+  VERSION=$(echo ${CI_COMMIT_REF_NAME} | sed "s/v//")
+  export VERSION=$VERSION
+  envsubst '${VERSION}' < setup.py > setup.py.new
+  mv setup.py.new setup.py
 
 
 ###################
@@ -25,10 +29,7 @@ unit-tests:
 build-package:
   stage: build
   script:
-    - VERSION=$(echo ${CI_COMMIT_REF_NAME} | sed "s/v//")
-    - export VERSION=$VERSION
-    - envsubst '${VERSION}' < setup.py > setup.py.new
-    - mv setup.py.new setup.py
+    - *set_version
     - python3 setup.py sdist bdist_wheel
   artifacts:
     paths:
@@ -38,16 +39,14 @@ build-package:
     - master
     - tags
 
+
 ###################
 # Deploy
 ###################
 deploy-package:
   stage: deploy
   script:
-    - VERSION=$(echo ${CI_COMMIT_REF_NAME} | sed "s/v//")
-    - export VERSION=$VERSION
-    - envsubst '${VERSION}' < setup.py > setup.py.new
-    - mv setup.py.new setup.py
+    - *set_version
     - echo -e "$PYPI" > ~/.pypirc
     - pip install twine
     - twine upload dist/* -r pypi
