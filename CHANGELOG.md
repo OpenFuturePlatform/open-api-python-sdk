@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Get all transactions API
 - Tests
 
+[2.0.0]: https://github.com/OpenFuturePlatform/open-api-python-sdk/compare/v2.0.0...v1.0.1
 [1.0.1]: https://github.com/OpenFuturePlatform/open-api-python-sdk/compare/v1.0.1...v1.0.0
-[1.0.2]: https://github.com/OpenFuturePlatform/open-api-python-sdk/compare/v2.0.0...v1.0.1
 [1.0.1]: https://github.com/OpenFuturePlatform/open-api-python-sdk/compare/v1.0.1...v1.0.0
 [1.0.0]: https://github.com/OpenFuturePlatform/open-api-python-sdk/compare/e8d583f41e071d56dbc6dcf924bcc3a35c85b302...v1.0.0
