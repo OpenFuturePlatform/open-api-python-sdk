@@ -100,7 +100,7 @@ transactionIndex|BigInteger                                           | Transact
 tokenBalance    |BigInteger                                           | Scaffold token balance
 enabled         |Boolean                                              | Scaffold enabled
 currency        |String                                               | Fiat amount currency
-shareHolders    |[ShareHolder](#share-holder-attributes)              | Scaffold share holders
+shareHolders    |[ShareHolder](#shareholder-attributes)               | Scaffold shareholders
 
 ##### get_summary(address)
 
@@ -192,7 +192,7 @@ quota = op.scaffold.get_quota()
 ```
 #### Shareholder
 
-##### Share holder attributes
+##### Shareholder attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------

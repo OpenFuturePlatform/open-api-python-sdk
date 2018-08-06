@@ -121,7 +121,7 @@ transactions = {
         'event': {
             'userAddress': developer_address,
             'partnerShare': 30,
-            'type': 'ADDED_SHARE_HOLDER'},
+            'type': 'ADDED_SHAREHOLDER'},
         'scaffold': scaffold}]}
 
 scaffold_data = {
