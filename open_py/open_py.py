@@ -1,7 +1,7 @@
-from openplatform.senders import Scaffold, Shareholder
+from open_py.senders import Scaffold, Shareholder
 
 
-class OpenPlatform(object):
+class OpenPy(object):
     def __init__(self, open_key=''):
         if open_key == '':
             raise AttributeError('open_key can not be empty')

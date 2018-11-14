@@ -29,10 +29,10 @@ To access the library import an OpenPlatform class and call an instance with the
 
 
 ```python
-from openplatform import OpenPlatform
+from openp_py import OpenPy
 
 # Access API via instance of OpenPlatform class
-op = OpenPlatform(open_key)
+op = OpenPy(open_key)
 ```
 `open_key` - your open key. 
 
@@ -100,7 +100,7 @@ transactionIndex|BigInteger                                           | Transact
 tokenBalance    |BigInteger                                           | Scaffold token balance
 enabled         |Boolean                                              | Scaffold enabled
 currency        |String                                               | Fiat amount currency
-shareHolders    |[ShareHolder](#share-holder-attributes)              | Scaffold share holders
+shareHolders    |[ShareHolder](#shareholder-attributes)               | Scaffold shareholders
 
 ##### get_summary(address)
 
@@ -192,7 +192,7 @@ quota = op.scaffold.get_quota()
 ```
 #### Shareholder
 
-##### Share holder attributes
+##### Shareholder attributes
 
 Attribute       | Type                                                | Description
 ----------------|-----------------------------------------------------|-----------

@@ -1,7 +1,7 @@
 import requests
 
-from openplatform.urls import base
-from openplatform.utils import validate_address, merge_headers, CONTENT_JSON
+from open_py.urls import base
+from open_py.utils import validate_address, merge_headers, CONTENT_JSON
 
 
 class Scaffold:

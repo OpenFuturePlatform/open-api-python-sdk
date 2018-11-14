@@ -1,5 +1,5 @@
-from openplatform import config
-from openplatform.config import base_url
+from open_py import config
+from open_py.config import base_url
 import urllib.parse
 
 
