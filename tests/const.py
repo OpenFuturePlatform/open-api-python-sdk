@@ -79,7 +79,7 @@ developer_address = '0xDc29484cc9C02Ee01015f33BcA8bBb5C7293Fb54'
 
 test_key = 'op_pk_50g48642-1af1-5dfg-54sz-f868s5v8796c'
 
-scaffold = {
+ethereum_scaffold = {
     'version': 'V2',
     'conversionAmount': '0.021833823',
     'address': '0x1c297f40beb075936d6dbe4b245b92738867ecb1',
@@ -99,7 +99,7 @@ scaffold = {
     },
     'webHook': None}
 
-list_of_scaffolds = {'totalCount': 1, 'list': [scaffold]}
+list_of_ethereum_scaffolds = {'totalCount': 1, 'list': [ethereum_scaffold]}
 
 authorization_header = {'Authorization': test_key}
 
@@ -112,7 +112,7 @@ summary = {
     'shareHolders': [],
     'tokenBalance': 0,
     'enabled': False,
-    'scaffold': scaffold}
+    'scaffold': ethereum_scaffold}
 
 transactions = {
     'totalCount': 1,
@@ -122,9 +122,9 @@ transactions = {
             'userAddress': developer_address,
             'partnerShare': 30,
             'type': 'ADDED_SHAREHOLDER'},
-        'scaffold': scaffold}]}
+        'scaffold': ethereum_scaffold}]}
 
-scaffold_data = {
+ethereum_scaffold_data = {
     "openKey": test_key,
     "developerAddress": developer_address,
     "description": "testing_scaffold",
@@ -139,27 +139,27 @@ scaffold_data = {
     ]
 }
 
-shareholder_to_be_added = {'address': developer_address, 'percent': 30}
+ethereum_shareholder_to_be_added = {'address': developer_address, 'percent': 30}
 
-shareholder_to_be_updated = {'percent': 30}
+ethereum_shareholder_to_be_updated = {'percent': 30}
 
 new_shareholders = {
     'shareHolders': [{'percent': 30, 'address': developer_address}],
     'tokenBalance': 0,
     'enabled': False,
-    'scaffold': scaffold,
+    'scaffold': ethereum_scaffold,
     'transactionIndex': 0}
 
 updated_shareholder = {
     'tokenBalance': 0,
-    'scaffold': scaffold,
+    'scaffold': ethereum_scaffold,
     'shareHolders': [{'address': developer_address, 'percent': 10}],
     'enabled': False,
     'transactionIndex': 0}
 
 removing_shareholder = {
     'tokenBalance': 0,
-    'scaffold': scaffold,
+    'scaffold': ethereum_scaffold,
     'shareHolders': [],
     'enabled': False,
     'transactionIndex': 0}
