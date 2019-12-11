@@ -15,7 +15,7 @@ def base_url_mock(rest):
     return urllib.parse.urljoin(predefined_url, rest)
 
 
-class TestScaffoldGetters(TestCase):
+class TestEthereumScaffoldGetters(TestCase):
     mock_requests_patcher = None
     requests_mock = None
 
@@ -30,22 +30,22 @@ class TestScaffoldGetters(TestCase):
 
     def test_getting_list(self):
         self.requests_mock.return_value = Mock(ok=True)
-        self.requests_mock.return_value.json.return_value = list_of_scaffolds
+        self.requests_mock.return_value.json.return_value = list_of_ethereum_scaffolds
 
         # Send a request to the API server and store the response.
         op = OpenPy(test_key)
-        response = op.scaffold.get_all()
+        response = op.ethereum_scaffold.get_all()
 
         # Confirm that the request-response cycle completed successfully.
-        self.assertEqual(response, list_of_scaffolds)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds'), headers=authorization_header)
+        self.assertEqual(response, list_of_ethereum_scaffolds)
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds'), headers=authorization_header)
 
     def test_getting_single_successfully(self):
         op = OpenPy(test_key)
-        self.requests_mock.return_value.json.return_value = scaffold
-        response = op.scaffold.get_single(valid_address)
-        self.assertEqual(response, scaffold)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
+        self.requests_mock.return_value.json.return_value = ethereum_scaffold
+        response = op.ethereum_scaffold.get_single(valid_address)
+        self.assertEqual(response, ethereum_scaffold)
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address), headers=authorization_header)
 
     def test_getting_single_with_wrong_token(self):
         mock_response = Mock()
@@ -58,9 +58,9 @@ class TestScaffoldGetters(TestCase):
                                                              'message': 'Open token is invalid or disabled'}
         op = OpenPy(invalid_key)
         with self.assertRaises(requests.HTTPError) as error:
-            op.scaffold.get_single(valid_address)
+            op.ethereum_scaffold.get_single(valid_address)
         self.assertEqual(str(error.exception), 'Open token is invalid or disabled')
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address),
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address),
                                               headers={'Authorization': invalid_key})
 
     def test_getting_single_without_token(self):
@@ -78,44 +78,44 @@ class TestScaffoldGetters(TestCase):
             'status': 404,
             'error': 'Not Found',
             'message': 'Not Found',
-            'path': '/api/scaffolds/0x0000000000000000000000000000000000000000'}
+            'path': '/api/ethereum_scaffolds/0x0000000000000000000000000000000000000000'}
         op = OpenPy(test_key)
         with self.assertRaises(requests.exceptions.HTTPError) as error:
-            op.scaffold.get_single(valid_address)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=authorization_header)
+            op.ethereum_scaffold.get_single(valid_address)
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address), headers=authorization_header)
         self.assertTrue(mock_response.raise_for_status.called)
         self.assertEqual('Not Found', str(error.exception))
 
     def test_getting_all_successfully(self):
         op = OpenPy(test_key)
-        self.requests_mock.return_value.json.return_value = list_of_scaffolds
-        response = op.scaffold.get_all()
-        self.assertEqual(response, list_of_scaffolds)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds'), headers=authorization_header)
+        self.requests_mock.return_value.json.return_value = list_of_ethereum_scaffolds
+        response = op.ethereum_scaffold.get_all()
+        self.assertEqual(response, list_of_ethereum_scaffolds)
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds'), headers=authorization_header)
 
     def test_getting_summary_successfully(self):
         op = OpenPy(test_key)
         self.requests_mock.return_value.json.return_value = summary
-        response = op.scaffold.get_summary(valid_address)
+        response = op.ethereum_scaffold.get_summary(valid_address)
         self.assertEqual(response, summary)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/summary'),
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address + '/summary'),
                                               headers=authorization_header)
 
     def test_getting_transactions_successfully(self):
         op = OpenPy(test_key)
         self.requests_mock.return_value.json.return_value = transactions
-        response = op.scaffold.get_transactions(valid_address)
+        response = op.ethereum_scaffold.get_transactions(valid_address)
         self.assertEqual(response, transactions)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/transactions'),
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address + '/transactions'),
                                               headers=authorization_header)
 
     def test_getting_quota_successfully(self):
         op = OpenPy(test_key)
         result_qouta = {'limitCount': 10, 'currentCount': 4}
         self.requests_mock.return_value.json.return_value = result_qouta
-        response = op.scaffold.get_quota()
+        response = op.ethereum_scaffold.get_quota()
         self.assertEqual(response, result_qouta)
-        self.requests_mock.assert_called_with(base_url_mock('scaffolds/quota'),
+        self.requests_mock.assert_called_with(base_url_mock('ethereum-scaffolds/quota'),
                                               headers=authorization_header)
 
 
@@ -123,75 +123,75 @@ class TestScaffoldPosters(TestCase):
 
     @patch('open_py.senders.requests.post')
     def test_deploying(self, post_mock):
-        post_mock.return_value.json.return_value = scaffold
+        post_mock.return_value.json.return_value = ethereum_scaffold
 
         op = OpenPy(test_key)
-        response = op.scaffold.deploy(scaffold_data)
+        response = op.ethereum_scaffold.deploy(ethereum_scaffold_data)
 
-        self.assertEqual(response, scaffold)
-        post_mock.assert_called_with(base_url_mock('scaffolds/doDeploy'), json=scaffold_data,
+        self.assertEqual(response, ethereum_scaffold)
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/doDeploy'), json=ethereum_scaffold_data,
                                      headers=request_headers)
 
 
-class TestScaffoldDeleters(TestCase):
+class TestEthereumScaffoldDeleters(TestCase):
 
     @patch('open_py.senders.requests.delete')
     def test_deactivating(self, post_mock):
-        post_mock.return_value.json.return_value = scaffold
+        post_mock.return_value.json.return_value = ethereum_scaffold
 
         op = OpenPy(test_key)
-        response = op.scaffold.deactivate(valid_address)
+        response = op.ethereum_scaffold.deactivate(valid_address)
 
-        self.assertEqual(response, scaffold)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), headers=request_headers)
+        self.assertEqual(response, ethereum_scaffold)
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address), headers=request_headers)
 
 
-class TestScaffoldPatchers(TestCase):
+class TestEthereumScaffoldPatchers(TestCase):
 
     @patch('open_py.senders.requests.patch')
     def test_setting_web_hook(self, post_mock):
-        post_mock.return_value.json.return_value = scaffold
+        post_mock.return_value.json.return_value = ethereum_scaffold
         web_hook = {'webHook': 'https://zensoft.io'}
         op = OpenPy(test_key)
-        response = op.scaffold.set_webhook(valid_address, web_hook)
+        response = op.ethereum_scaffold.set_webhook(valid_address, web_hook)
 
-        self.assertEqual(response, scaffold)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address), json=web_hook,
+        self.assertEqual(response, ethereum_scaffold)
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address), json=web_hook,
                                      headers=request_headers)
 
 
-class TestShareholders(TestCase):
+class TestEthereumShareholders(TestCase):
 
     @patch('open_py.senders.requests.post')
     def test_creation(self, post_mock):
         post_mock.return_value.json.return_value = new_shareholders
         op = OpenPy(test_key)
-        response = op.shareholder.create(valid_address, shareholder_to_be_added)
+        response = op.ethereum_shareholder.create(valid_address, ethereum_shareholder_to_be_added)
 
         self.assertEqual(response, new_shareholders)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders'),
-                                     json=shareholder_to_be_added,
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address + '/holders'),
+                                     json=ethereum_shareholder_to_be_added,
                                      headers=request_headers)
 
     @patch('open_py.senders.requests.put')
     def test_updating(self, post_mock):
-        post_mock.return_value.json.return_value = scaffold
+        post_mock.return_value.json.return_value = ethereum_scaffold
         op = OpenPy(test_key)
-        response = op.shareholder.update(valid_address, developer_address, shareholder_to_be_updated)
+        response = op.ethereum_shareholder.update(valid_address, developer_address, ethereum_shareholder_to_be_updated)
 
-        self.assertEqual(response, scaffold)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders/' + developer_address),
-                                     json=shareholder_to_be_updated,
+        self.assertEqual(response, ethereum_scaffold)
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address + '/holders/' + developer_address),
+                                     json=ethereum_shareholder_to_be_updated,
                                      headers=request_headers)
 
     @patch('open_py.senders.requests.delete')
     def test_removing(self, post_mock):
         post_mock.return_value.json.return_value = removing_shareholder
         op = OpenPy(test_key)
-        response = op.shareholder.remove(valid_address, developer_address)
+        response = op.ethereum_shareholder.remove(valid_address, developer_address)
 
         self.assertEqual(response, removing_shareholder)
-        post_mock.assert_called_with(base_url_mock('scaffolds/' + valid_address + '/holders/' + developer_address),
+        post_mock.assert_called_with(base_url_mock('ethereum-scaffolds/' + valid_address + '/holders/' + developer_address),
                                      headers=request_headers)
 
 
